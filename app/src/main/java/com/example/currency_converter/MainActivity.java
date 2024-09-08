@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         Button buttonConvert = findViewById(R.id.button_convert);
         TextView textViewConvertedValue = findViewById(R.id.converted_value);
         EditText amount = findViewById(R.id.edit_text_amount);
+
+        //header
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setTitle("Mjenjačnica");
@@ -62,10 +64,11 @@ public class MainActivity extends AppCompatActivity {
         Executors.newSingleThreadExecutor()
                 .execute(() -> {
                     historyDatabase = HistoryDatabase.getInstance(MainActivity.this);
-
+                //asinkrono dohvaćanje iz baze
                 });
 
 
+        //dropdown za valute
         ArrayAdapter<CharSequence>adapter= ArrayAdapter.createFromResource(this, R.array.currencies, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         spinnerFromCurrency.setAdapter(adapter);
@@ -79,9 +82,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                final Handler handler = new Handler();
+                handler.post(() -> Toast.makeText(MainActivity.this, "Niste odabrali nijednu valutu!!", Toast.LENGTH_SHORT).show());
             }
         });
+
+
         spinnerFromCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            //u slucaju odabira valute poziva se ova metoda
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String text = parent.getItemAtPosition(position).toString();
@@ -89,15 +97,19 @@ public class MainActivity extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                final Handler handler = new Handler();
+                handler.post(() -> Toast.makeText(MainActivity.this, "Niste odabrali nijednu valutu!!", Toast.LENGTH_SHORT).show());
             }
         });
 
     }
+    //prikaz menija u headeru
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
@@ -150,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             rate = savedInstanceState.getDouble("rate", 0.0);
         }
     }
-
+    //konvertiranje valuta u EUR
     public double convertToEur(){
         EditText amount = findViewById(R.id.edit_text_amount);
         double value = Double.parseDouble(amount.getText().toString());
@@ -202,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         return convertedValue;
 
     }
-
+    //konvertiranje valuta iz EUR
     public double convertFromEur(){
         double convertedValue = convertToEur();
         double value = 0.0;
@@ -232,26 +244,26 @@ public class MainActivity extends AppCompatActivity {
                 rate = 1.50;
                 break;
             case "JPY":
-                value = convertedValue * 130.0; // For example purposes
+                value = convertedValue * 130.0;
                 rate = 130.0;
                 break;
             case "SEK":
-                value = convertedValue * 11.0; // Example rate
+                value = convertedValue * 11.0;
                 rate = 11.0;
                 break;
             case "NOK":
-                value = convertedValue * 11.5; // Example rate
+                value = convertedValue * 11.5;
                 rate = 11.5;
                 break;
             case "CNY":
-                value = convertedValue * 7.8; // Example rate
+                value = convertedValue * 7.8;
                 rate = 7.8;
                 break;
         }
         return value;
     }
 
-
+    //metoda za pretvorbu
     public void convert_action(View view) {
 
         EditText amount = findViewById(R.id.edit_text_amount);
@@ -270,11 +282,11 @@ public class MainActivity extends AppCompatActivity {
         }else {
             double convertedValue = convertFromEur();
             textViewConvertedValue.setText(String.format(Double.toString(Math.ceil(convertedValue*1000)/1000)));
-
             addDataInBackground(createDataLog(Double.parseDouble(amount.getText().toString())));
         }
 
     }
+    //pozadinska operacija koja dodaje u bazu podatke asinkrono
     private void addDataInBackground(HistoryData data){
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -288,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    //metoda koja sprema podatke u objekt, gdje se na frontendu ispisuje
     private HistoryData createDataLog(Double amount){
 
         SimpleDateFormat sdfDate = new SimpleDateFormat("d-M-yyyy");

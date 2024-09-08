@@ -25,18 +25,21 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
     private Context context;
     private HistoryDatabase db;
 
+    //konstruktor
     public HistoryAdapter(Context context, List<HistoryData> historyDataList) {
         this.context = context;
         this.historyDataList = historyDataList;
         db = HistoryDatabase.getInstance(context);
     }
-
+    //prikazuje layout item_row
     @NonNull
     @Override
     public HistoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_row, parent, false);
         return new HistoryViewHolder(view);
     }
+
+    //koristi se za prikaz podataka
     public static class HistoryViewHolder extends RecyclerView.ViewHolder {
         TextView amountTextView;
         TextView fromTextView;
@@ -58,7 +61,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             deleteButton = itemView.findViewById(R.id.delete_button);
         }
     }
-
+    //spaja sa objektima u xml za ispis podataka
     @Override
     public void onBindViewHolder(@NonNull HistoryViewHolder holder, int position) {
         HistoryData currentHistoryData = historyDataList.get(position);
@@ -74,17 +77,17 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.HistoryV
             notifyItemRangeChanged(position, historyDataList.size());
         });
     }
-
+    //brisanje asinkrono
     private void delete(int id){
 
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Handler handler = new Handler();
         executorService.execute(() -> {
             db.dao().delete(id);
-            handler.post(() -> Toast.makeText( context, "Data deleted", Toast.LENGTH_SHORT).show());
+            handler.post(() -> Toast.makeText( context, "Obrisano", Toast.LENGTH_SHORT).show());
         });
     }
-
+    //vraca broj velicine liste da RecyclerView zna koliko ih vraca
     @Override
     public int getItemCount() {
         return historyDataList.size();

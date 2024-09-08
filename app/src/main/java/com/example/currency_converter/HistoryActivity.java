@@ -44,8 +44,10 @@ public class HistoryActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+        //prikazuje kalendar
         datePickerEditText.setOnClickListener(v -> showDatePickerDialog());
 
+        //pretraživanje po datumu
         searchButton.setOnClickListener(v -> {
             String selectedDate = datePickerEditText.getText().toString();
             if (!selectedDate.isEmpty()) {
@@ -55,6 +57,7 @@ public class HistoryActivity extends AppCompatActivity {
             }
         });
 
+        //asinkrono dohvaća podatke
         final Handler handler = new Handler();
         Executors.newSingleThreadExecutor()
                 .execute(() -> {
@@ -90,6 +93,7 @@ public class HistoryActivity extends AppCompatActivity {
                 });
     }
 
+    //pomoću ove metode se prikazuje kalendar i onda formatira datum
     private void showDatePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -104,6 +108,7 @@ public class HistoryActivity extends AppCompatActivity {
 
         datePickerDialog.show();
     }
+    //prikaz podataka RecycleView-om koristeći LinearLayoutManager
     public void display(List<HistoryData> historyDataList){
 
         recyclerView = findViewById(R.id.recycler_view);
