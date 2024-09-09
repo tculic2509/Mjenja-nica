@@ -11,6 +11,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -267,25 +268,47 @@ public class MainActivity extends AppCompatActivity {
     public void convert_action(View view) {
 
         EditText amount = findViewById(R.id.edit_text_amount);
+        amount.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+
+
         TextView textViewConvertedValue = findViewById(R.id.converted_value);
 
-        if(amount.getText().toString() == ""){
-            Toast.makeText(this,"Unesite broj!!!",Toast.LENGTH_SHORT).show();
-        } else if (to == "EUR") {
-            double convertedValue = convertToEur();
-            textViewConvertedValue.setText(String.format(Double.toString(convertedValue)));
-            addDataInBackground(createDataLog(Double.parseDouble(amount.getText().toString())));
-        }
-        else if (to == from) {
-            textViewConvertedValue.setText(String.format(Double.toString(Math.ceil(Double.parseDouble(String.valueOf(amount))))));
-            addDataInBackground(createDataLog(Double.parseDouble(amount.getText().toString())));
-        }else {
-            double convertedValue = convertFromEur();
-            textViewConvertedValue.setText(String.format(Double.toString(Math.ceil(convertedValue*1000)/1000)));
-            addDataInBackground(createDataLog(Double.parseDouble(amount.getText().toString())));
-        }
+        // Dohvati uneseni tekst
+        String amountText = amount.getText().toString().trim();
 
+
+        // Provjera da li je polje prazno
+        if (amountText.isEmpty()) {
+            Toast.makeText(this, "Unesite broj!!!", Toast.LENGTH_SHORT).show();
+            return; // Prekini ako je polje prazno
+        }
+        // Provjera da li su valute jednake
+        if (from.equals(to)) {
+            Toast.makeText(this, "Promijenite valutu!!!", Toast.LENGTH_SHORT).show();
+            return; // Prekini ako su valute jednake
+        }
+            // Pokušaj parsiranja unosa u double
+            double amountValue = Double.parseDouble(amountText);
+
+            // Provjera da li su varijable 'to' i 'from' ispravno postavljene
+            if (to.equals(null) || from.equals(null)) {
+                Toast.makeText(this, "Valute nisu pravilno postavljene!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (to.equals("EUR")) {
+                double convertedValue = convertToEur();
+                textViewConvertedValue.setText(String.format("%.3f", convertedValue));
+                addDataInBackground(createDataLog(amountValue));
+            } else if (to.equals(from)) {
+                textViewConvertedValue.setText(String.format("%.3f", amountValue));
+                addDataInBackground(createDataLog(amountValue));
+            } else {
+                double convertedValue = convertFromEur();
+                textViewConvertedValue.setText(String.format("%.3f", Math.ceil(convertedValue * 1000) / 1000));
+                addDataInBackground(createDataLog(amountValue));
+            }
     }
+
     //pozadinska operacija koja dodaje u bazu podatke asinkrono
     private void addDataInBackground(HistoryData data){
 
