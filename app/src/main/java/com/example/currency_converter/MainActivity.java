@@ -172,43 +172,43 @@ public class MainActivity extends AppCompatActivity {
         switch (from){
             case "EUR":
                 convertedValue = value;
-                rate = 0.0;
+                rate = 1.0;  // EUR is the base currency
                 break;
             case "USD":
-                convertedValue = value * 0.89;
-                rate = 0.89;
+                convertedValue = value * 0.91;  // 1 USD ≈ 0.94 EUR
+                rate = 0.91;
                 break;
             case "AUD":
-                convertedValue = value * 0.61;
-                rate = 0.61;
+                convertedValue = value * 0.60;  // 1 AUD ≈ 0.60 EUR
+                rate = 0.60;
                 break;
             case "CHF":
-                convertedValue = value * 1.06;
-                rate = 1.06;
+                convertedValue = value * 1.07;  // 1 CHF ≈ 1.03 EUR
+                rate = 1.07;
                 break;
             case "GBP":
-                convertedValue = value * 1.19;
-                rate = 1.19;
+                convertedValue = value * 1.18;  // 1 GBP ≈ 1.16 EUR
+                rate = 1.18;
                 break;
             case "CAD":
-                convertedValue = value * 0.67;
+                convertedValue = value * 0.67;  // 1 CAD ≈ 0.69 EUR
                 rate = 0.67;
                 break;
             case "JPY":
-                convertedValue = value * 0.0067;
-                rate = 0.0067;
+                convertedValue = value * 0.1;  // 1 JPY ≈ 0.0063 EUR
+                rate = 0.1;
                 break;
             case "SEK":
-                convertedValue = value * 0.093;
-                rate = 0.093;
+                convertedValue = value * 0.09;  // 1 SEK ≈ 0.085 EUR
+                rate = 0.09;
                 break;
             case "NOK":
-                convertedValue = value * 0.096;
-                rate = 0.096;
+                convertedValue = value * 0.08;  // 1 NOK ≈ 0.087 EUR
+                rate = 0.08;
                 break;
             case "CNY":
-                convertedValue = value * 0.14;
-                rate = 0.14;
+                convertedValue = value * 0.13;  // 1 CNY ≈ 0.13 EUR
+                rate = 0.13;
                 break;
 
         }
@@ -219,18 +219,18 @@ public class MainActivity extends AppCompatActivity {
     public double convertFromEur(){
         double convertedValue = convertToEur();
         double value = 0.0;
-        switch (to){
+        switch (to) {
             case "EUR":
                 value = convertedValue;
-                rate = 0.0;
+                rate = 1.0;  // EUR is the base currency
                 break;
             case "USD":
-                value = convertedValue * 1.12;
-                rate = 1.12;
+                value = convertedValue * 1.10;
+                rate = 1.10;
                 break;
             case "AUD":
-                value = convertedValue * 1.65;
-                rate = 1.65;
+                value = convertedValue * 1.66;
+                rate = 1.66;
                 break;
             case "CHF":
                 value = convertedValue * 0.94;
@@ -245,20 +245,20 @@ public class MainActivity extends AppCompatActivity {
                 rate = 1.50;
                 break;
             case "JPY":
-                value = convertedValue * 130.0;
-                rate = 130.0;
+                value = convertedValue * 157.63;
+                rate = 157.63;
                 break;
             case "SEK":
-                value = convertedValue * 11.0;
-                rate = 11.0;
+                value = convertedValue * 11.46;
+                rate = 11.46;
                 break;
             case "NOK":
-                value = convertedValue * 11.5;
-                rate = 11.5;
+                value = convertedValue * 11.94;
+                rate = 11.94;
                 break;
             case "CNY":
-                value = convertedValue * 7.8;
-                rate = 7.8;
+                value = convertedValue * 7.85;
+                rate = 7.85;
                 break;
         }
         return value;
