@@ -17,6 +17,8 @@ import android.widget.Toast;
 import com.example.currency_converter.db.HistoryDatabase;
 import com.example.currency_converter.entities.HistoryData;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -80,6 +82,7 @@ public class HistoryActivity extends AppCompatActivity {
                     historyDatabase = HistoryDatabase.getInstance(HistoryActivity.this);
                     List<HistoryData> filteredData = historyDatabase.dao().getAllDataByDate(date);
                     if(filteredData.isEmpty()){
+
                         handler.post(() -> Toast.makeText(HistoryActivity.this, "Ne postoje podatci na taj datum", Toast.LENGTH_SHORT).show());
 
                     }else{
